@@ -1,0 +1,14 @@
+{ "projectName": "DB-Manager DevOps Tool",
+  "category": "Service Management",
+  "author": “Mehmet Berkle Yavuz”,
+  "version": "1.0.0",
+  "description": "Multi-database management and automation tool for DevOps.",
+  "features": [
+    "One-click DB installation (Docker)",
+    "Connection health check",
+    "User permission management"
+  ],
+  "requirements": {
+    "os": "Ubuntu 22.04 / Windows Docker",
+    "language": "Python 3.10"}
+}
