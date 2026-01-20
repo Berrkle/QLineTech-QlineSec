@@ -1,0 +1,17 @@
+# 📘 Kullanım Kılavuzu
+
+Bu araç, terminal üzerinden veritabanı yönetimini otomatize eder.
+
+### Ön Gereksinimler
+- Bilgisayarınızda **Docker Desktop** yüklü ve çalışıyor olmalıdır.
+- **Python 3.10+** yüklü olmalıdır.
+
+### Adım Adım Çalıştırma
+1. Terminalden proje ana dizinine gidin.
+2. `python src/main.py` komutunu çalıştırın.
+3. Menüden kurulum yapmak istediğiniz veritabanını seçin.
+4. Kurulum bittikten sonra Docker Desktop arayüzünden konteynerın çalıştığını teyit edebilirsiniz.
+
+### Hata Giderme
+- **Docker Error:** Eğer Docker kapalıysa program hata verecektir. Uygulamayı başlatıp tekrar deneyin.
+- **Port Error:** Eğer 3306 portu başka bir uygulama tarafından kullanılıyorsa kurulum başarısız olabilir.
