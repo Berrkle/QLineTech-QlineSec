@@ -1,0 +1,67 @@
+import docker
+import time
+
+# Docker bağlantısı kontrolü
+try:
+    client = docker.from_env()
+except Exception as e:
+    print("Hata: Docker Desktop'ın açık olduğundan emin olun!")
+    exit()
+
+def veritabanı_kur(db_tipi, konteyner_adı, sifre, port):
+    """Genel veritabanı kurulum ve test fonksiyonu"""
+    image_dict = {
+        "mysql": "mysql:8.0",
+        "postgres": "postgres:latest"
+    }
+    env_dict = {
+        "mysql": {"MYSQL_ROOT_PASSWORD": sifre},
+        "postgres": {"POSTGRES_PASSWORD": sifre}
+    }
+
+    print(f"\n[+] {db_tipi.upper()} kuruluyor (Konteyner: {konteyner_adı})...")
+    
+    try:
+        container = client.containers.run(
+            image_dict[db_tipi],
+            detach=True,
+            name=konteyner_adı,
+            environment=env_dict[db_tipi],
+            ports={f'{port}/tcp': port}
+        )
+        
+        print(f"[OK] {db_tipi.upper()} başlatıldı. ID: {container.short_id}")
+        
+        # AUTO-TEST MEKANİZMASI (Ödev Adım 7 & 9 Gereksinimi)
+        print(f"[*] {db_tipi.upper()} için Auto-Test başlatılıyor...")
+        time.sleep(10) # Servislerin ayağa kalkması için bekleme
+        
+        container.reload() # Güncel durumu Docker'dan çek
+        if container.status == "running":
+            print(f"[BAŞARILI] {db_tipi.upper()} çalışıyor ve bağlantıya hazır!")
+        else:
+            print(f"[UYARI] Konteyner durumu: {container.status}. Manuel kontrol gerekebilir.")
+            
+    except Exception as e:
+        print(f"[HATA] Kurulum başarısız: {e}")
+
+if __name__ == "__main__":
+    while True:
+        print("\n--- DB-Manager DevOps Tool Menu ---")
+        print("1. MySQL Kur (Port: 3306)")
+        print("2. PostgreSQL Kur (Port: 5432)")
+        print("3. Çıkış")
+        
+        secim = input("Seçiminizi yapın (1/2/3): ")
+        
+        if secim == "1":
+            sifre = input("MySQL Root şifresini girin: ")
+            veritabanı_kur("mysql", "odev_mysql", sifre, 3306)
+        elif secim == "2":
+            sifre = input("PostgreSQL şifresini girin: ")
+            veritabanı_kur("postgres", "odev_postgres", sifre, 5432)
+        elif secim == "3":
+            print("Programdan çıkılıyor...")
+            break
+        else:
+            print("Geçersiz seçim!")
